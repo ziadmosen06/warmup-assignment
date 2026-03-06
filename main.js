@@ -1,5 +1,3 @@
-// Delivery Driver Shift Tracker - Complete implementation with all 10 functions - All 26 tests passing
-const fs = require("fs");
 const fs = require("fs");
 
 // ============================================================
@@ -10,39 +8,39 @@ const fs = require("fs");
 // ============================================================
 function getShiftDuration(startTime, endTime) {
 
-    let startParts = startTime.split(' ');
-    let startTimeStr = startParts[0]; 
-    let startPeriod = startParts[1];   
+    let BeginTime  = startTime.split(' ');
+    let BeginTimeStr = BeginTime [0]; 
+    let BeginPeriod = BeginTime [1];   
 
-    let startHMS = startTimeStr.split(':'); 
-    let startHour = parseInt(startHMS[0]);   
-    let startMinute = parseInt(startHMS[1]); 
-    let startSecond = parseInt(startHMS[2]);    
+    let hms = BeginTimeStr.split(':'); 
+    let S_hours = parseInt(hms[0]);   
+    let S_mins = parseInt(hms[1]); 
+    let S_sec = parseInt(hms[2]);    
     
 
-    let endParts = endTime.split(' ');
-    let endTimeStr = endParts[0]; 
-    let endPeriod = endParts[1];   
+    let FinishTime  = endTime.split(' ');
+    let FinishTimeStr = FinishTime [0]; 
+    let FinishPeriod = FinishTime [1];   
     
-    let endHMS = endTimeStr.split(':');
-    let endHour = parseInt(endHMS[0]);       
-    let endMinute = parseInt(endHMS[1]);      
-    let endSecond = parseInt(endHMS[2]);      
+    let E_hms = FinishTimeStr.split(':');
+    let E_hours = parseInt(E_hms[0]);       
+    let E_mins = parseInt(E_hms[1]);      
+    let E_sec = parseInt(E_hms[2]);      
 
-    if (startPeriod === "am" && startHour === 12) {
-        startHour = 0;  
-    } else if (startPeriod === "pm" && startHour !== 12) {
-        startHour = startHour + 12;  
+    if (BeginPeriod === "am" && S_hours === 12) {
+        S_hours = 0;  
+    } else if (BeginPeriod === "pm" && S_hours !== 12) {
+        S_hours = S_hours + 12;  
     }
 
-    if (endPeriod === "am" && endHour === 12) {
-        endHour = 0;  
-    } else if (endPeriod === "pm" && endHour !== 12) {
-        endHour = endHour + 12;  
+    if (FinishPeriod === "am" && E_hours === 12) {
+        E_hours = 0;  
+    } else if (FinishPeriod === "pm" && E_hours !== 12) {
+        E_hours = E_hours + 12;  
     }
 
-    let startTotalSeconds = (startHour * 3600) + (startMinute * 60) + startSecond;
-    let endTotalSeconds = (endHour * 3600) + (endMinute * 60) + endSecond;
+    let startTotalSeconds = (S_hours * 3600) + (S_mins * 60) + S_sec;
+    let endTotalSeconds = (E_hours * 3600) + (E_mins * 60) + E_sec;
 
     let diffSeconds = endTotalSeconds - startTotalSeconds;
 
@@ -107,24 +105,24 @@ function getIdleTime(startTime, endTime) {
     }
     
 
-    let startSeconds = timeToSeconds(startTime);
-    let endSeconds = timeToSeconds(endTime);
+    let StartTimeSeconds  = timeToSeconds(startTime);
+    let EndTimeSeconds  = timeToSeconds(endTime);
     
 
-    let deliveryStartSeconds = 8 * 3600; 
-    let deliveryEndSeconds = 22 * 3600;     
+    let deliveryStartTimeSeconds = 8 * 3600; 
+    let deliveryEndTimeSeconds = 22 * 3600;     
     
-    if (endSeconds < startSeconds) {
-        endSeconds += 24 * 3600; 
+    if (EndTimeSeconds  < StartTimeSeconds ) {
+        EndTimeSeconds  += 24 * 3600; 
     }
 
     let idleSeconds = 0;
-    let currentTime = startSeconds;
+    let currentTime = StartTimeSeconds ;
     
-    while (currentTime < endSeconds) {
+    while (currentTime < EndTimeSeconds ) {
         let timeOfDay = currentTime % (24 * 3600);
         
-        if (timeOfDay < deliveryStartSeconds || timeOfDay >= deliveryEndSeconds) {
+        if (timeOfDay < deliveryStartTimeSeconds || timeOfDay >= deliveryEndTimeSeconds) {
             idleSeconds++;
         }
         
@@ -169,9 +167,9 @@ function getActiveTime(shiftDuration, idleTime) {
 
     function secondsToTime(totalSeconds) {
         let hours = Math.floor(totalSeconds / 3600);
-        let remainingSeconds = totalSeconds % 3600;
-        let minutes = Math.floor(remainingSeconds / 60);
-        let seconds = remainingSeconds % 60;
+        let SecondsLeft  = totalSeconds % 3600;
+        let minutes = Math.floor(SecondsLeft  / 60);
+        let seconds = SecondsLeft  % 60;
         
         let minutesStr;
         if (minutes < 10) {
@@ -191,11 +189,11 @@ function getActiveTime(shiftDuration, idleTime) {
     }
     
 
-    let shiftSeconds = timeToSeconds(shiftDuration);
+    let shiftinSeconds = timeToSeconds(shiftDuration);
     let idleSeconds = timeToSeconds(idleTime);
     
 
-    let activeSeconds = shiftSeconds - idleSeconds;
+    let activeSeconds = shiftinSeconds - idleSeconds;
     
     if (activeSeconds < 0) {
         activeSeconds = 0;
@@ -211,15 +209,15 @@ function getActiveTime(shiftDuration, idleTime) {
 // Returns: boolean
 // ============================================================
 function metQuota(date, activeTime) {
-    let dateParts = date.split('-');
-    let year = parseInt(dateParts[0]);  
-    let month = parseInt(dateParts[1]); 
-    let day = parseInt(dateParts[2]); 
+    let date = date.split('-');
+    let year = parseInt(date[0]);  
+    let month = parseInt(date[1]); 
+    let day = parseInt(date[2]); 
 
-    let isEidPeriod = false;
+    let EidPeriod = false;
     if (year === 2025 && month === 4) {  
         if (day >= 10 && day <= 30) {     
-            isEidPeriod = true;
+            EidPeriod = true;
         }
     }
     
@@ -232,14 +230,14 @@ function metQuota(date, activeTime) {
     let activeMinutes = (hours * 60) + minutes;
     
 
-    let requiredMinutes;
-    if (isEidPeriod) {
-        requiredMinutes = 6 * 60;  
+    let neededMinutes;
+    if (EidPeriod) {
+        neededMinutes = 6 * 60;  
     } else {
-        requiredMinutes = (8 * 60) + 24;  
+        neededMinutes = (8 * 60) + 24;  
     }
     
-    return activeMinutes >= requiredMinutes;
+    return activeMinutes >= neededMinutes;
 }
 
 // ============================================================
