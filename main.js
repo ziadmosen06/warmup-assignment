@@ -210,9 +210,9 @@ function getActiveTime(shiftDuration, idleTime) {
 // ============================================================
 function metQuota(date, activeTime) {
     let datePart = date.split('-');
-    let year = parseInt(date[0]);  
-    let month = parseInt(date[1]); 
-    let day = parseInt(date[2]); 
+    let year = parseInt(datePart[0]);  
+    let month = parseInt(datePart[1]);   
+    let day = parseInt(datePart[2]);    
 
     let EidPeriod = false;
     if (year === 2025 && month === 4) {  
