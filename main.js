@@ -209,7 +209,7 @@ function getActiveTime(shiftDuration, idleTime) {
 // Returns: boolean
 // ============================================================
 function metQuota(date, activeTime) {
-    let date = date.split('-');
+    let datePart = date.split('-');
     let year = parseInt(date[0]);  
     let month = parseInt(date[1]); 
     let day = parseInt(date[2]); 
